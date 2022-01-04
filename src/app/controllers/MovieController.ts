@@ -33,8 +33,32 @@ class MovieController {
         return res.json(newMovie);
     }
 
-    async getEmployees(req: Request, res: Response) {
+    async getMovies(req: Request, res: Response) {
         const repository = getRepository(Movie);
+        
+        const movies = await repository.find();
+
+        if (!movies) {
+            return res.sendStatus(409);
+        }
+
+        return res.json(movies);
+    }
+
+    async getMoviesAuthorized(req: Request, res: Response) {
+        const repository = getRepository(Movie);
+        const repoEmployee = getRepository(Employee);
+
+        const employee = await repoEmployee.findOne(
+            { where:
+                { id: req.employeeId }
+            }
+        );
+
+        if (employee?.roles !== 'authorizer')
+        {
+            return res.json({ message: 'Employee has to be the authorizer type.' });
+        }
 
         const movies = await repository.find();
 

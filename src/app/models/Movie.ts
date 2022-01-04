@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Cre
 import bcrypt from "bcryptjs";
 import Employee from "./Employee";
 
-@Entity('movie')
+@Entity('movie-authorized')
 class Movie {
 
     @PrimaryGeneratedColumn('uuid')

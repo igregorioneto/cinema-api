@@ -10,6 +10,8 @@ router.get('/employee', EmployeeController.getEmployees);
 router.post('/employee', EmployeeController.store);
 
 router.post('/movie', authMiddleware, MovieController.store);
+router.get('/movie', authMiddleware, MovieController.getMovies);
+router.get('/movie-authorized', authMiddleware, MovieController.getMoviesAuthorized);
 
 router.post('/auth', AuthController.authenticate);
 
