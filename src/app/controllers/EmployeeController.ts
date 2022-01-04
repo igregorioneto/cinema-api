@@ -21,7 +21,7 @@ class EmployeeController {
 
     async getEmployees(req: Request, res: Response) {
         const repository = getRepository(Employee);
-
+        
         const employees = await repository.find();
 
         if (!employees) {

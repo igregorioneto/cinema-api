@@ -10,23 +10,25 @@ interface TokenPayload {
 export default function authMiddleware (
     req: Request, res: Response, next: NextFunction
 ) {
-    const { authorization } = req.headers;
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if(!token) {    
+        res.status(401).send({
+            error: 'Acesso restrito!'
+        });
+    } else {
+        jwt.verify(token, 'secret', (error: any, decode: any) => {
+            if(error) {
+                res.status(401).send({
+                    error: 'Token inválido'
+                });
+            } else {
+                const data = jwt.verify(token, 'secret');
 
-    if (!authorization) {
-        return res.sendStatus(401);
-    }
+                const { id } = data as TokenPayload;
 
-    const token = authorization.replace('Bearer', '').trim();
-
-    try {
-        const data = jwt.verify(token, 'secret');
-
-        const { id } = data as TokenPayload;
-
-        req.employeeId = id;
-
-        return next();
-    } catch(err) {
-        return res.sendStatus(401);
+                req.employeeId = id;
+                next();
+            }
+        });
     }
 }

@@ -17,12 +17,12 @@ class Movie {
     @Column({ default: false })
     authorized: boolean;
 
-    @CreateDateColumn({ 
-        name: 'remove_poster', 
-        type: "timestamp", 
-        default: () => "CURRENT_TIMESTAMP"
-    })
-    removePoster: Date;
+    // @CreateDateColumn({ 
+    //    name: 'remove_poster', 
+    //    type: "timestamp", 
+    //    default: () => "CURRENT_TIMESTAMP"
+    // })
+    // removePoster: Date;
 
     @Column({ name: 'employee_id' })
     employeeId: string;

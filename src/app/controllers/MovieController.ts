@@ -1,19 +1,31 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
+import Employee from '../models/Employee';
 import Movie from '../models/Movie';
 
 class MovieController {
     async store(req: Request, res: Response) {
         const repository = getRepository(Movie);
+        const repoEmployee = getRepository(Employee);
         const movie = new Movie();
 
-        const { name, category } = req.body;
+        const employee = await repoEmployee.findOne(
+            { where:
+                { id: req.employeeId }
+            }
+        );
+
+        if (employee?.roles !== 'creator')
+        {
+            return res.json({ message: 'Employee has to be the creator type.' });
+        }
+
+        const { name, category, authorized } = req.body;
 
         movie.employeeId = req.employeeId;
         movie.category = category;
         movie.name = name;
-
-        console.log(movie)
+        movie.authorized = authorized;
 
         const newMovie = await repository.create(movie);
         await repository.save(newMovie);

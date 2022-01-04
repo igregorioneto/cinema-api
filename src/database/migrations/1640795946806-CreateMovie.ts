@@ -29,10 +29,6 @@ export class CreateMovie1640795946806 implements MigrationInterface {
                         type: 'boolean',
                     },
                     {
-                        name: 'remove_poster',
-                        type: 'timestamp'
-                    },
-                    {
                         name: 'employee_id',
                         type: 'uuid',
                         isPrimary: false,
