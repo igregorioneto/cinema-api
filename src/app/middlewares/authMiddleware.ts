@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 interface TokenPayload {
     id: string;
@@ -16,7 +18,7 @@ export default function authMiddleware (
             error: 'Acesso restrito!'
         });
     } else {
-        jwt.verify(token, 'secret', (error: any, decode: any) => {
+        jwt.verify(token, process.env.SECRET!, (error: any, decode: any) => {
             if(error) {
                 res.status(401).send({
                     error: 'Token inválido'
