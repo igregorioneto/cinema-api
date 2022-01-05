@@ -79,7 +79,7 @@ class MovieController {
         const movie = new Movie();
 
         const { id } = req.params;
-        console.log(id)
+
         const employee = await repoEmployee.findOne(
             { where:
                 { id: req.employeeId }
@@ -94,12 +94,10 @@ class MovieController {
         const movieAuthorized = await repository.findOne(
             {
                 where: {
-                    id: id
+                    id
                 }
             }
         );
-
-        console.log(movieAuthorized)
 
         movie.authorized = true;
         movie.category = movieAuthorized?.category!;
@@ -113,6 +111,41 @@ class MovieController {
         await repository.delete({id: movieAuthorized?.id});
 
         return res.json({ message: 'Movie authorized' });
+    }
+
+    async removeMovie(req: Request, res: Response)
+    {
+        const repoEmployee = getRepository(Employee);
+        const repoMovie = getRepository(Movie);
+
+        const { id } = req.params;
+
+        const employee = await repoEmployee.findOne(
+            { where:
+                { id: req.employeeId }
+            }
+        );
+
+        if (employee?.roles !== 'manager')
+        {
+            return res.json({ message: 'Employee has to be the manager type.' });
+        }
+
+        const movie = await repoMovie.findOne({
+            where: {
+                id
+            }
+        });
+
+        if (!movie)
+        {
+            return res.json({ message: 'Movie not found' });
+        }
+
+        await repoMovie.delete({id: movie.id});
+
+        return res.json({ message: 'Successfully deleted Movie' });
+
     }
 
 }
