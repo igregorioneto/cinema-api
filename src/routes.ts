@@ -11,6 +11,7 @@ router.post('/employee', EmployeeController.store);
 
 router.post('/movie', authMiddleware, MovieController.store);
 router.get('/movie', authMiddleware, MovieController.getMovies);
+router.post('/movie-authorized/:id', authMiddleware, MovieController.authorizedMovie);
 router.get('/movie-authorized', authMiddleware, MovieController.getMoviesAuthorized);
 
 router.post('/auth', AuthController.authenticate);

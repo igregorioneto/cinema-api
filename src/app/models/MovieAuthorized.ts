@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Cre
 import bcrypt from "bcryptjs";
 import Employee from "./Employee";
 
-@Entity('movie')
-class Movie {
+@Entity('movie-authorized')
+class MovieAuthorized {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -35,4 +35,4 @@ class Movie {
 
 }
 
-export default Movie;
+export default MovieAuthorized;

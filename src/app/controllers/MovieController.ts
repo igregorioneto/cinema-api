@@ -2,12 +2,13 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import Employee from '../models/Employee';
 import Movie from '../models/Movie';
+import MovieAuthorized from '../models/MovieAuthorized';
 
 class MovieController {
     async store(req: Request, res: Response) {
-        const repository = getRepository(Movie);
+        const repository = getRepository(MovieAuthorized);
         const repoEmployee = getRepository(Employee);
-        const movie = new Movie();
+        const movie = new MovieAuthorized();
 
         const employee = await repoEmployee.findOne(
             { where:
@@ -35,7 +36,7 @@ class MovieController {
 
     async getMovies(req: Request, res: Response) {
         const repository = getRepository(Movie);
-        
+
         const movies = await repository.find();
 
         if (!movies) {
@@ -46,7 +47,7 @@ class MovieController {
     }
 
     async getMoviesAuthorized(req: Request, res: Response) {
-        const repository = getRepository(Movie);
+        const repository = getRepository(MovieAuthorized);
         const repoEmployee = getRepository(Employee);
 
         const employee = await repoEmployee.findOne(
@@ -67,6 +68,51 @@ class MovieController {
         }
 
         return res.json(movies);
+    }
+
+    async authorizedMovie(req: Request, res: Response)
+    {
+        const repository = getRepository(MovieAuthorized);
+        const repoEmployee = getRepository(Employee);
+        const repoMovie = getRepository(Movie);
+
+        const movie = new Movie();
+
+        const { id } = req.params;
+        console.log(id)
+        const employee = await repoEmployee.findOne(
+            { where:
+                { id: req.employeeId }
+            }
+        );
+
+        if (employee?.roles !== 'authorizer')
+        {
+            return res.json({ message: 'Employee has to be the authorizer type.' });
+        }
+
+        const movieAuthorized = await repository.findOne(
+            {
+                where: {
+                    id: id
+                }
+            }
+        );
+
+        console.log(movieAuthorized)
+
+        movie.authorized = true;
+        movie.category = movieAuthorized?.category!;
+        movie.name = movieAuthorized?.name!;
+        movie.employeeId = movieAuthorized?.employeeId!;
+        movie.id = movieAuthorized?.id!;
+
+        const newMovie = await repoMovie.create(movie);
+        await repoMovie.save(newMovie);
+
+        await repository.delete({id: movieAuthorized?.id});
+
+        return res.json({ message: 'Movie authorized' });
     }
 
 }
