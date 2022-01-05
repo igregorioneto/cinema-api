@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, OneToMany } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import bcrypt from "bcryptjs";
 import Movie from "./Movie";
 

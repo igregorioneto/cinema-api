@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, CreateDateColumn, ManyToOne, JoinColumn, UpdateDateColumn } from "typeorm";
 import bcrypt from "bcryptjs";
 import Employee from "./Employee";
 
@@ -16,13 +16,6 @@ class MovieAuthorized {
 
     @Column({ default: false })
     authorized: boolean;
-
-    // @CreateDateColumn({ 
-    //    name: 'remove_poster', 
-    //    type: "timestamp", 
-    //    default: () => "CURRENT_TIMESTAMP"
-    // })
-    // removePoster: Date;
 
     @Column({ name: 'employee_id' })
     employeeId: string;
